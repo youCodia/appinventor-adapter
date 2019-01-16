@@ -33,12 +33,13 @@ export async function parseData(strData, json) {
         return str;
       }
       const importClass = upperFirst(key);
-      const model = await import(`../models/${importClass}`);
-      const Model = model.default;
-      if (Model) {
-        return new Model(strData, json);
+      const model = await import(`appinventor-adapter`);
+      const Model = model[importClass];
+      const defaultExport = Model.default;
+      if (defaultExport) {
+        return new defaultExport(strData, json);
       }
-      return new model(strData, json);
+      return new Model(strData, json);
     }
   }
 }
